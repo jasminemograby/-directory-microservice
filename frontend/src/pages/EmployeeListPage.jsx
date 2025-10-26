@@ -22,6 +22,17 @@ const EmployeeListPage = () => {
   const [showBulkActions, setShowBulkActions] = useState(false);
 
   useEffect(() => {
+    // Try to load employees from localStorage first
+    const savedEmployees = localStorage.getItem('companyEmployees');
+    if (savedEmployees) {
+      try {
+        const parsedEmployees = JSON.parse(savedEmployees);
+        setEmployees(parsedEmployees);
+      } catch (error) {
+        console.error('Error parsing saved employees:', error);
+      }
+    }
+
     // Get company data from location state or mock data
     if (location.state?.companyData) {
       setCompanyData(location.state.companyData);
@@ -46,7 +57,12 @@ const EmployeeListPage = () => {
           coursesInProgress: Math.floor(Math.random() * 3)
         }));
         setEmployees(convertedEmployees);
+        // Save to localStorage
+        localStorage.setItem('companyEmployees', JSON.stringify(convertedEmployees));
       }
+    } else if (location.state?.employees) {
+      // Use employees passed from navigation
+      setEmployees(location.state.employees);
     } else {
       // Mock data for demonstration
       setEmployees([
@@ -269,8 +285,21 @@ const EmployeeListPage = () => {
 
   const handleDeleteEmployee = (employeeId) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
-      setEmployees(employees.filter(emp => emp.id !== employeeId));
+      const updatedEmployees = employees.filter(emp => emp.id !== employeeId);
+      setEmployees(updatedEmployees);
+      // Save to localStorage
+      localStorage.setItem('companyEmployees', JSON.stringify(updatedEmployees));
     }
+  };
+
+  const handleBackToDashboard = () => {
+    navigate('/company-dashboard', { 
+      state: { 
+        employees: employees,
+        companyData: companyData,
+        updatedCompanyData: companyData
+      } 
+    });
   };
 
   const clearFilters = () => {
@@ -299,7 +328,7 @@ const EmployeeListPage = () => {
           <div className="header-actions">
             <button 
               className="action-btn secondary"
-              onClick={() => navigate('/company-dashboard')}
+              onClick={handleBackToDashboard}
             >
               <Building2 className="h-5 w-5" />
               Back to Dashboard

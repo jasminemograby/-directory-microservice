@@ -34,7 +34,18 @@ const CompanyDashboardPage = () => {
   useEffect(() => {
     fetchCompanies()
     
-    // Get company data from setup process
+    // Try to load employees from localStorage first
+    const savedEmployees = localStorage.getItem('companyEmployees');
+    if (savedEmployees) {
+      try {
+        const parsedEmployees = JSON.parse(savedEmployees);
+        setEmployees(parsedEmployees);
+      } catch (error) {
+        console.error('Error parsing saved employees:', error);
+      }
+    }
+    
+    // Get company data from setup process or from navigation back
     if (location.state?.companyData) {
       setCompanyData(location.state.companyData)
       // Convert setup employees to dashboard format
@@ -52,9 +63,23 @@ const CompanyDashboardPage = () => {
           targetRole: emp.targetRole
         }))
         setEmployees(convertedEmployees)
+        // Save to localStorage
+        localStorage.setItem('companyEmployees', JSON.stringify(convertedEmployees));
       }
     }
-  }, [location.state])
+    
+    // Handle navigation back from Employee List with updated employees
+    if (location.state?.employees) {
+      setEmployees(location.state.employees)
+      // Save to localStorage
+      localStorage.setItem('companyEmployees', JSON.stringify(location.state.employees));
+    }
+    
+    // Handle navigation back from Employee List with updated company data
+    if (location.state?.updatedCompanyData) {
+      setCompanyData(location.state.updatedCompanyData)
+    }
+  }, [location.state, fetchCompanies])
 
   const handleAddEmployee = (e) => {
     e.preventDefault()
@@ -72,6 +97,8 @@ const CompanyDashboardPage = () => {
     }
 
     setEmployees([...employees, employee])
+    // Save to localStorage
+    localStorage.setItem('companyEmployees', JSON.stringify([...employees, employee]));
     setNewEmployee({
       firstName: '',
       lastName: '',
@@ -115,7 +142,10 @@ const CompanyDashboardPage = () => {
   })
 
   const handleDeleteEmployee = (id) => {
-    setEmployees(employees.filter(emp => emp.id !== id))
+    const updatedEmployees = employees.filter(emp => emp.id !== id)
+    setEmployees(updatedEmployees)
+    // Save to localStorage
+    localStorage.setItem('companyEmployees', JSON.stringify(updatedEmployees));
     toast.success('Employee removed successfully!')
   }
 
@@ -869,4 +899,5 @@ const CompanyDashboardPage = () => {
   )
 }
 
+export default CompanyDashboardPage
 export default CompanyDashboardPage
