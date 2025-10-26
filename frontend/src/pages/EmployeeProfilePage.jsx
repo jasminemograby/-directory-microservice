@@ -16,11 +16,101 @@ const EmployeeProfilePage = () => {
   const [showSkillGapModal, setShowSkillGapModal] = useState(false);
 
   useEffect(() => {
+    // Try to load from location state first (from navigation)
     if (location.state?.employee) {
       setEmployee(location.state.employee);
     }
     if (location.state?.companyData) {
       setCompanyData(location.state.companyData);
+    } else {
+      // If no company data in state, try to load from localStorage
+      const savedCompanyData = localStorage.getItem('companyData');
+      if (savedCompanyData) {
+        try {
+          setCompanyData(JSON.parse(savedCompanyData));
+        } catch (error) {
+          console.error('Error parsing saved company data:', error);
+        }
+      }
+    }
+
+    // If no employee in state, try to load from localStorage or create mock data
+    if (!location.state?.employee) {
+      const savedEmployees = localStorage.getItem('companyEmployees');
+      if (savedEmployees) {
+        try {
+          const employees = JSON.parse(savedEmployees);
+          // Get employee ID from URL params
+          const employeeId = window.location.pathname.split('/').pop();
+          const foundEmployee = employees.find(emp => emp.id === employeeId);
+          if (foundEmployee) {
+            setEmployee(foundEmployee);
+          } else {
+            // Create mock employee if not found
+            setEmployee({
+              id: employeeId,
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john.doe@example.com',
+              position: 'Software Engineer',
+              department: 'Engineering',
+              team: 'Frontend',
+              phone: '123-456-7890',
+              status: 'active',
+              trainerType: 'regular',
+              targetRole: 'Senior Engineer in 1 year',
+              hireDate: '2023-01-15T08:00:00Z',
+              lastLogin: '2024-07-20T10:30:00Z',
+              skills: ['JavaScript', 'React', 'Node.js'],
+              coursesCompleted: 5,
+              coursesInProgress: 2
+            });
+          }
+        } catch (error) {
+          console.error('Error parsing saved employees:', error);
+          // Create mock employee as fallback
+          const employeeId = window.location.pathname.split('/').pop();
+          setEmployee({
+            id: employeeId,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+            position: 'Software Engineer',
+            department: 'Engineering',
+            team: 'Frontend',
+            phone: '123-456-7890',
+            status: 'active',
+            trainerType: 'regular',
+            targetRole: 'Senior Engineer in 1 year',
+            hireDate: '2023-01-15T08:00:00Z',
+            lastLogin: '2024-07-20T10:30:00Z',
+            skills: ['JavaScript', 'React', 'Node.js'],
+            coursesCompleted: 5,
+            coursesInProgress: 2
+          });
+        }
+      } else {
+        // Create mock employee as fallback
+        const employeeId = window.location.pathname.split('/').pop();
+        setEmployee({
+          id: employeeId,
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          position: 'Software Engineer',
+          department: 'Engineering',
+          team: 'Frontend',
+          phone: '123-456-7890',
+          status: 'active',
+          trainerType: 'regular',
+          targetRole: 'Senior Engineer in 1 year',
+          hireDate: '2023-01-15T08:00:00Z',
+          lastLogin: '2024-07-20T10:30:00Z',
+          skills: ['JavaScript', 'React', 'Node.js'],
+          coursesCompleted: 5,
+          coursesInProgress: 2
+        });
+      }
     }
   }, [location.state]);
 

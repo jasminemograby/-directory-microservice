@@ -18,6 +18,7 @@ const EmployeeEditPage = () => {
   const [changeRequests, setChangeRequests] = useState([]);
 
   useEffect(() => {
+    // Try to load from location state first (from navigation)
     if (location.state?.employee) {
       setEmployee(location.state.employee);
       setFormData({
@@ -45,9 +46,61 @@ const EmployeeEditPage = () => {
           country: ''
         }
       });
+    } else {
+      // If no employee in state, try to load from localStorage
+      const savedEmployees = localStorage.getItem('companyEmployees');
+      if (savedEmployees) {
+        try {
+          const employees = JSON.parse(savedEmployees);
+          // Get employee ID from URL params
+          const employeeId = window.location.pathname.split('/')[2]; // /employee/{id}/edit
+          const foundEmployee = employees.find(emp => emp.id === employeeId);
+          if (foundEmployee) {
+            setEmployee(foundEmployee);
+            setFormData({
+              firstName: foundEmployee.firstName || '',
+              lastName: foundEmployee.lastName || '',
+              email: foundEmployee.email || '',
+              phone: foundEmployee.phone || '',
+              position: foundEmployee.position || '',
+              department: foundEmployee.department || '',
+              team: foundEmployee.team || '',
+              trainerType: foundEmployee.trainerType || 'regular',
+              targetRole: foundEmployee.targetRole || '',
+              bio: foundEmployee.bio || '',
+              skills: foundEmployee.skills || [],
+              emergencyContact: foundEmployee.emergencyContact || {
+                name: '',
+                phone: '',
+                relationship: ''
+              },
+              address: foundEmployee.address || {
+                street: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: ''
+              }
+            });
+          }
+        } catch (error) {
+          console.error('Error parsing saved employees:', error);
+        }
+      }
     }
+
     if (location.state?.companyData) {
       setCompanyData(location.state.companyData);
+    } else {
+      // If no company data in state, try to load from localStorage
+      const savedCompanyData = localStorage.getItem('companyData');
+      if (savedCompanyData) {
+        try {
+          setCompanyData(JSON.parse(savedCompanyData));
+        } catch (error) {
+          console.error('Error parsing saved company data:', error);
+        }
+      }
     }
   }, [location.state]);
 
