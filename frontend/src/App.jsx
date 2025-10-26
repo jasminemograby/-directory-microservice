@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterCompanyPage from './pages/RegisterCompanyPage'
 import CompanyDashboardPage from './pages/CompanyDashboardPage'
+import DirectoryDashboardPage from './pages/DirectoryDashboardPage'
 import EmployeePage from './pages/EmployeePage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
@@ -26,6 +27,7 @@ function App() {
           isAuthenticated ? <Navigate to="/hr/dashboard" replace /> : <LoginPage />
         } />
         
+        <Route path="/directory" element={<DirectoryDashboardPage />} />
         <Route path="/register-company" element={<RegisterCompanyPage />} />
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         
