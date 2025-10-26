@@ -11,6 +11,7 @@ import CompanyDashboardPage from './pages/CompanyDashboardPage'
 import DirectoryDashboardPage from './pages/DirectoryDashboardPage'
 import EmployeeListPage from './pages/EmployeeListPage'
 import EmployeeProfilePage from './pages/EmployeeProfilePage'
+import EmployeeEditPage from './pages/EmployeeEditPage'
 import EmployeePage from './pages/EmployeePage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
@@ -39,6 +40,7 @@ function App() {
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         <Route path="/employees" element={<EmployeeListPage />} />
         <Route path="/employee/:id" element={<EmployeeProfilePage />} />
+        <Route path="/employee/:id/edit" element={<EmployeeEditPage />} />
         
         {/* Protected routes */}
         <Route path="/" element={
