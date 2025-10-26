@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterCompanyPage from './pages/RegisterCompanyPage'
 import CompanyRegistrationPage from './pages/CompanyRegistrationPage'
+import CompanyVerificationPage from './pages/CompanyVerificationPage'
 import CompanyDashboardPage from './pages/CompanyDashboardPage'
 import DirectoryDashboardPage from './pages/DirectoryDashboardPage'
 import EmployeePage from './pages/EmployeePage'
@@ -30,6 +31,7 @@ function App() {
         
         <Route path="/directory" element={<DirectoryDashboardPage />} />
         <Route path="/register-company" element={<CompanyRegistrationPage />} />
+        <Route path="/company-verification" element={<CompanyVerificationPage />} />
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         
         {/* Protected routes */}

@@ -1276,45 +1276,395 @@ body {
     transform: translateY(-1px);
 }
 
-/* Company Registration Responsive Design */
+/* Company Verification Page Styles */
+.company-verification-page {
+    min-height: 100vh;
+    padding: var(--spacing-lg);
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verification-container {
+    max-width: 800px;
+    width: 100%;
+}
+
+.verification-content {
+    background: var(--gradient-card);
+    border-radius: 20px;
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(6, 95, 70, 0.1);
+    text-align: center;
+}
+
+.verification-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.verification-icon,
+.success-icon {
+    margin: 0 auto var(--spacing-lg) auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(6, 95, 70, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verification-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.verification-title.success {
+    color: var(--success-green);
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+}
+
+.verification-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.verification-subtitle.success {
+    color: var(--text-primary);
+}
+
+.progress-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.progress-bar-container {
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.verification-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: left;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: rgba(6, 95, 70, 0.05);
+    border: 1px solid rgba(6, 95, 70, 0.1);
+}
+
+.step.completed {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.step.active .step-icon {
+    background: rgba(6, 95, 70, 0.1);
+}
+
+.step.completed .step-icon {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+}
+
+.step-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.company-preview,
+.company-summary {
+    background: rgba(6, 95, 70, 0.05);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    margin-bottom: var(--spacing-lg);
+    text-align: left;
+}
+
+.preview-title,
+.summary-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.preview-grid,
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.preview-item,
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) 0;
+}
+
+.preview-label,
+.summary-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.preview-value,
+.summary-value {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.success-details {
+    margin-bottom: var(--spacing-xl);
+}
+
+.success-card {
+    background: rgba(16, 185, 129, 0.05);
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.success-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.success-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.success-step {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    text-align: left;
+}
+
+.success-step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(6, 95, 70, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.success-step-content {
+    flex: 1;
+}
+
+.success-step-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+}
+
+.success-step-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.verification-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.continue-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-card);
+    min-width: 200px;
+    justify-content: center;
+}
+
+.continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.back-btn {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 2px solid var(--bg-secondary);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    background: var(--bg-secondary);
+    transform: translateY(-1px);
+}
+
+/* Company Verification Responsive Design */
 @media (max-width: 768px) {
-    .company-registration-page {
+    .company-verification-page {
         padding: var(--spacing-sm);
     }
     
-    .header-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .header-text h1 {
-        font-size: 2rem;
-    }
-    
-    .registration-form-container {
+    .verification-content {
         padding: var(--spacing-lg);
     }
     
-    .form-grid {
+    .verification-title {
+        font-size: 2rem;
+    }
+    
+    .verification-steps {
+        gap: var(--spacing-sm);
+    }
+    
+    .step {
+        padding: var(--spacing-sm);
+    }
+    
+    .preview-grid,
+    .summary-grid {
         grid-template-columns: 1fr;
     }
     
-    .submit-button {
+    .verification-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .continue-btn,
+    .back-btn {
         min-width: auto;
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .registration-form-container {
+    .verification-content {
         padding: var(--spacing-md);
     }
     
-    .form-section {
+    .verification-icon,
+    .success-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .verification-title {
+        font-size: 1.75rem;
+    }
+    
+    .step {
+        flex-direction: column;
+        text-align: center;
         gap: var(--spacing-sm);
     }
     
-    .section-title {
-        font-size: 1.25rem;
+    .success-step {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
     }
 }
