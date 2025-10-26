@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon src/presentation/server.js",
     "start": "node src/presentation/server.js",
-    "build": "echo 'No build step required for Node.js'",
+    "build": "echo 'No build step required'",
     "test": "jest",
     "test:watch": "jest --watch"
   },
