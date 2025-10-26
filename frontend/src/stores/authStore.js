@@ -23,6 +23,16 @@ const useAuthStore = create(
           if (response.success) {
             const roleNav = getRoleNavigation(response.user.role)
             
+            // Determine redirect route based on role
+            let redirectTo = roleNav.defaultRoute
+            
+            // For roles that go to employee pages, add the user's ID
+            if (roleNav.defaultRoute === '/employee') {
+              redirectTo = `/employee/${response.user.id}`
+            } else if (roleNav.defaultRoute === '/trainer') {
+              redirectTo = `/trainer/${response.user.id}`
+            }
+            
             set({
               user: response.user,
               token: response.token,
@@ -35,7 +45,7 @@ const useAuthStore = create(
             
             return {
               success: true,
-              redirectTo: roleNav.defaultRoute,
+              redirectTo: redirectTo,
               user: response.user
             }
           } else {

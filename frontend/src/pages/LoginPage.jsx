@@ -101,7 +101,7 @@ const LoginPage = () => {
                       color: 'var(--text-primary)',
                       focusRingColor: 'var(--primary-cyan)'
                     }}
-                    placeholder="Enter your email"
+                    placeholder="Enter your username"
                   />
                 </div>
               </div>
