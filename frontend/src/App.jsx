@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
+import { ThemeProvider } from './contexts/ThemeContext'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterCompanyPage from './pages/RegisterCompanyPage'
@@ -10,13 +11,16 @@ import TrainingRequestsPage from './pages/TrainingRequestsPage'
 import InstructorsPage from './pages/InstructorsPage'
 import AdminLogsPage from './pages/AdminLogsPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import BackgroundAnimation from './components/BackgroundAnimation'
 
 function App() {
   const { isAuthenticated } = useAuthStore()
 
   return (
-    <div className="min-h-screen bg-background">
-      <Routes>
+    <ThemeProvider>
+      <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+        <BackgroundAnimation />
+        <Routes>
         {/* Public routes */}
         <Route path="/login" element={
           isAuthenticated ? <Navigate to="/hr/dashboard" replace /> : <LoginPage />
@@ -41,8 +45,9 @@ function App() {
         
         {/* Catch all route */}
         <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </div>
+        </Routes>
+      </div>
+    </ThemeProvider>
   )
 }
 

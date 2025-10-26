@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useCompanyStore } from '../stores/companyStore'
-import { Building2, Users, Plus, UserPlus, Settings, BarChart3, Calendar, CheckCircle } from 'lucide-react'
+import { useTheme } from '../contexts/ThemeContext'
+import ThemeToggle from '../components/ThemeToggle'
+import { Building2, Users, Plus, UserPlus, Settings, BarChart3, Calendar, CheckCircle, Edit, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const CompanyDashboardPage = () => {
   const { companies, fetchCompanies, isLoading } = useCompanyStore()
+  const { isDarkMode } = useTheme()
   const [activeTab, setActiveTab] = useState('overview')
   const [employees, setEmployees] = useState([])
   const [newEmployee, setNewEmployee] = useState({
@@ -48,347 +51,392 @@ const CompanyDashboardPage = () => {
   }
 
   const currentCompany = companies[0] || {
-    name: 'Your Company',
-    domain: 'yourcompany.com',
+    id: 'comp_001',
+    name: 'TechCorp Solutions',
+    domain: 'techcorp.com',
     industry: 'Technology',
-    size: '50-200',
-    status: 'verified'
+    size: '501-1000',
+    status: 'verified',
+    employeesCount: employees.length,
+    trainingPrograms: 5,
+    pendingRequests: 2,
+  }
+
+  const handleDeleteEmployee = (id) => {
+    setEmployees(employees.filter(emp => emp.id !== id))
+    toast.success('Employee removed successfully!')
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <div className="h-12 w-12 flex items-center justify-center rounded-full bg-blue-100">
-                <Building2 className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <h1 className="text-2xl font-bold text-gray-900">{currentCompany.name}</h1>
-                <p className="text-sm text-gray-600">{currentCompany.domain}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Verified
-              </span>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-primary)' }}>
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            {[
-              { id: 'overview', name: 'Overview', icon: BarChart3 },
-              { id: 'employees', name: 'Employees', icon: Users },
-              { id: 'training', name: 'Training', icon: Calendar },
-              { id: 'settings', name: 'Settings', icon: Settings }
-            ].map((tab) => {
-              const Icon = tab.icon
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <Icon className="h-5 w-5 mr-2" />
-                  {tab.name}
-                </button>
-              )
-            })}
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8">
+          <div 
+            className="mx-auto h-12 w-12 flex items-center justify-center rounded-full"
+            style={{ background: 'var(--gradient-primary)' }}
+          >
+            <Building2 className="h-6 w-6 text-white" />
+          </div>
+          <h1 className="mt-4 text-3xl font-extrabold" style={{ color: 'var(--text-primary)' }}>
+            {currentCompany.name} Dashboard
+          </h1>
+          <p className="mt-2 text-lg" style={{ color: 'var(--text-secondary)' }}>
+            Manage your company's directory, employees, and training
+          </p>
+        </div>
+
+        {/* Tabs */}
+        <div className="border-b" style={{ borderColor: 'var(--bg-tertiary)' }}>
+          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`${
+                activeTab === 'overview'
+                  ? 'border-opacity-100'
+                  : 'border-transparent hover:border-opacity-50'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200`}
+              style={{
+                borderColor: activeTab === 'overview' ? 'var(--primary-cyan)' : 'transparent',
+                color: activeTab === 'overview' ? 'var(--primary-cyan)' : 'var(--text-secondary)'
+              }}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('employees')}
+              className={`${
+                activeTab === 'employees'
+                  ? 'border-opacity-100'
+                  : 'border-transparent hover:border-opacity-50'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200`}
+              style={{
+                borderColor: activeTab === 'employees' ? 'var(--primary-cyan)' : 'transparent',
+                color: activeTab === 'employees' ? 'var(--primary-cyan)' : 'var(--text-secondary)'
+              }}
+            >
+              Employees ({employees.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('training')}
+              className={`${
+                activeTab === 'training'
+                  ? 'border-opacity-100'
+                  : 'border-transparent hover:border-opacity-50'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200`}
+              style={{
+                borderColor: activeTab === 'training' ? 'var(--primary-cyan)' : 'transparent',
+                color: activeTab === 'training' ? 'var(--primary-cyan)' : 'var(--text-secondary)'
+              }}
+            >
+              Training
+            </button>
           </nav>
         </div>
-      </div>
 
-      {/* Tab Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'overview' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <Users className="h-6 w-6 text-gray-400" />
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">Total Employees</dt>
-                        <dd className="text-lg font-medium text-gray-900">{employees.length}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <Building2 className="h-6 w-6 text-gray-400" />
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">Company Size</dt>
-                        <dd className="text-lg font-medium text-gray-900">{currentCompany.size}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white overflow-hidden shadow rounded-lg">
-                <div className="p-5">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <Calendar className="h-6 w-6 text-gray-400" />
-                    </div>
-                    <div className="ml-5 w-0 flex-1">
-                      <dl>
-                        <dt className="text-sm font-medium text-gray-500 truncate">Industry</dt>
-                        <dd className="text-lg font-medium text-gray-900">{currentCompany.industry}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Company Information</h3>
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Company Name</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentCompany.name}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Domain</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentCompany.domain}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Industry</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentCompany.industry}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Size</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentCompany.size}</dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'employees' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-900">Employees</h2>
-              <button
-                onClick={() => setActiveTab('add-employee')}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+        {/* Tab Content */}
+        <div className="mt-8">
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div 
+                className="card"
+                style={{ 
+                  background: 'var(--gradient-card)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: 'var(--spacing-lg)',
+                  boxShadow: 'var(--shadow-card)'
+                }}
               >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Add Employee
-              </button>
-            </div>
-
-            {employees.length === 0 ? (
-              <div className="text-center py-12">
-                <Users className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No employees</h3>
-                <p className="mt-1 text-sm text-gray-500">Get started by adding your first employee.</p>
-                <div className="mt-6">
-                  <button
-                    onClick={() => setActiveTab('add-employee')}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Employee
-                  </button>
+                <div className="flex items-center">
+                  <Building2 className="h-8 w-8 mr-4" style={{ color: 'var(--primary-cyan)' }} />
+                  <div>
+                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Company Details</h3>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Domain: {currentCompany.domain}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Industry: {currentCompany.industry}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Size: {currentCompany.size} employees</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Status: {currentCompany.status}</p>
+                  </div>
                 </div>
               </div>
-            ) : (
-              <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                <ul className="divide-y divide-gray-200">
-                  {employees.map((employee) => (
-                    <li key={employee.id}>
-                      <div className="px-4 py-4 flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                              <span className="text-sm font-medium text-gray-700">
-                                {employee.firstName[0]}{employee.lastName[0]}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {employee.firstName} {employee.lastName}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {employee.position} • {employee.department}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Active
-                          </span>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
 
-        {activeTab === 'add-employee' && (
-          <div className="max-w-2xl">
-            <div className="mb-6">
-              <button
-                onClick={() => setActiveTab('employees')}
-                className="text-blue-600 hover:text-blue-500 text-sm font-medium"
+              <div 
+                className="card"
+                style={{ 
+                  background: 'var(--gradient-card)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: 'var(--spacing-lg)',
+                  boxShadow: 'var(--shadow-card)'
+                }}
               >
-                ← Back to Employees
-              </button>
+                <div className="flex items-center">
+                  <Users className="h-8 w-8 mr-4" style={{ color: 'var(--accent-green)' }} />
+                  <div>
+                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Employees</h3>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{employees.length}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total active employees</p>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className="card"
+                style={{ 
+                  background: 'var(--gradient-card)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: 'var(--spacing-lg)',
+                  boxShadow: 'var(--shadow-card)'
+                }}
+              >
+                <div className="flex items-center">
+                  <Settings className="h-8 w-8 mr-4" style={{ color: 'var(--accent-orange)' }} />
+                  <div>
+                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Training Programs</h3>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{currentCompany.trainingPrograms}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Active training programs</p>
+                  </div>
+                </div>
+              </div>
+
+              <div 
+                className="card"
+                style={{ 
+                  background: 'var(--gradient-card)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  padding: 'var(--spacing-lg)',
+                  boxShadow: 'var(--shadow-card)'
+                }}
+              >
+                <div className="flex items-center">
+                  <BarChart3 className="h-8 w-8 mr-4" style={{ color: 'var(--accent-gold)' }} />
+                  <div>
+                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Pending Requests</h3>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{currentCompany.pendingRequests}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Training & HR requests</p>
+                  </div>
+                </div>
+              </div>
             </div>
+          )}
 
-            <div className="bg-white shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Add New Employee</h3>
-                <form onSubmit={handleAddEmployee} className="space-y-6">
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                        First Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        id="firstName"
-                        required
-                        value={newEmployee.firstName}
-                        onChange={(e) => setNewEmployee({...newEmployee, firstName: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
+          {activeTab === 'employees' && (
+            <div 
+              className="card"
+              style={{ 
+                background: 'var(--gradient-card)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: 'var(--spacing-lg)',
+                boxShadow: 'var(--shadow-card)'
+              }}
+            >
+              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Manage Employees</h2>
 
-                    <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                        Last Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        id="lastName"
-                        required
-                        value={newEmployee.lastName}
-                        onChange={(e) => setNewEmployee({...newEmployee, lastName: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
+              {/* Add Employee Form */}
+              <form onSubmit={handleAddEmployee} className="mb-8 p-4 rounded-lg" style={{ 
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--bg-tertiary)'
+              }}>
+                <h3 className="text-lg font-medium mb-4" style={{ color: 'var(--text-primary)' }}>Add New Employee</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="firstName" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>First Name *</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.firstName}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, firstName: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lastName" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Last Name *</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.lastName}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, lastName: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Email *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.email}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="position" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Position</label>
+                    <input
+                      type="text"
+                      id="position"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.position}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="department" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Department</label>
+                    <input
+                      type="text"
+                      id="department"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.department}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, department: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Phone</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.phone}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary mt-6 inline-flex items-center px-4 py-2 text-sm font-medium"
+                  style={{
+                    background: 'var(--gradient-primary)',
+                    color: 'white',
+                    boxShadow: 'var(--shadow-glow)'
+                  }}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" /> Add Employee
+                </button>
+              </form>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        id="email"
-                        required
-                        value={newEmployee.email}
-                        onChange={(e) => setNewEmployee({...newEmployee, email: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        id="phone"
-                        value={newEmployee.phone}
-                        onChange={(e) => setNewEmployee({...newEmployee, phone: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="position" className="block text-sm font-medium text-gray-700">
+              {/* Employee List */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y" style={{ borderColor: 'var(--bg-tertiary)' }}>
+                  <thead style={{ background: 'var(--bg-secondary)' }}>
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        Name
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                         Position
-                      </label>
-                      <input
-                        type="text"
-                        name="position"
-                        id="position"
-                        value={newEmployee.position}
-                        onChange={(e) => setNewEmployee({...newEmployee, position: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="department" className="block text-sm font-medium text-gray-700">
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                         Department
-                      </label>
-                      <input
-                        type="text"
-                        name="department"
-                        id="department"
-                        value={newEmployee.department}
-                        onChange={(e) => setNewEmployee({...newEmployee, department: e.target.value})}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      type="submit"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      <UserPlus className="h-4 w-4 mr-2" />
-                      Add Employee
-                    </button>
-                  </div>
-                </form>
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        Status
+                      </th>
+                      <th scope="col" className="relative px-6 py-3">
+                        <span className="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y" style={{ 
+                    background: 'var(--bg-primary)',
+                    borderColor: 'var(--bg-tertiary)'
+                  }}>
+                    {employees.map((employee) => (
+                      <tr key={employee.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                          {employee.firstName} {employee.lastName}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          {employee.position}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          {employee.department}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            employee.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          }`}>
+                            {employee.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button className="mr-3 hover:opacity-70" style={{ color: 'var(--primary-cyan)' }}>
+                            <Edit className="h-5 w-5" />
+                          </button>
+                          <button onClick={() => handleDeleteEmployee(employee.id)} className="hover:opacity-70" style={{ color: 'var(--streak-color)' }}>
+                            <Trash2 className="h-5 w-5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'training' && (
-          <div className="text-center py-12">
-            <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Training Management</h3>
-            <p className="mt-1 text-sm text-gray-500">Training features coming soon!</p>
-          </div>
-        )}
-
-        {activeTab === 'settings' && (
-          <div className="text-center py-12">
-            <Settings className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">Company Settings</h3>
-            <p className="mt-1 text-sm text-gray-500">Settings features coming soon!</p>
-          </div>
-        )}
+          {activeTab === 'training' && (
+            <div 
+              className="card"
+              style={{ 
+                background: 'var(--gradient-card)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: 'var(--spacing-lg)',
+                boxShadow: 'var(--shadow-card)'
+              }}
+            >
+              <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Training Programs</h2>
+              <p style={{ color: 'var(--text-secondary)' }}>
+                Details about training programs will go here.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
