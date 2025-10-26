@@ -28,10 +28,17 @@ import BackgroundAnimation from './components/BackgroundAnimation'
 function App() {
   const { isAuthenticated } = useAuthStore()
 
+  // Debug: Log if app is loading
+  console.log('App component loaded, isAuthenticated:', isAuthenticated)
+
   return (
     <ThemeProvider>
-      <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+      <div className="min-h-screen" style={{ background: 'var(--bg-primary, #0a0a0a)' }}>
         <BackgroundAnimation />
+        {/* Debug: Show if app is loading */}
+        <div style={{ position: 'fixed', top: '10px', right: '10px', background: 'rgba(0,0,0,0.8)', color: 'white', padding: '10px', borderRadius: '5px', fontSize: '12px', zIndex: 9999 }}>
+          App Loaded ✅ | Auth: {isAuthenticated ? 'Yes' : 'No'}
+        </div>
         <Routes>
         {/* Public routes */}
         <Route path="/login" element={
