@@ -14,6 +14,7 @@ import EmployeeProfilePage from './pages/EmployeeProfilePage'
 import EmployeeEditPage from './pages/EmployeeEditPage'
 import EmployeePage from './pages/EmployeePage'
 import TrainingRequestPage from './pages/TrainingRequestPage'
+import EmployeeRequestPage from './pages/EmployeeRequestPage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
 import InstructorsPage from './pages/InstructorsPage'
@@ -43,6 +44,7 @@ function App() {
         <Route path="/employee/:id" element={<EmployeeProfilePage />} />
         <Route path="/employee/:id/edit" element={<EmployeeEditPage />} />
         <Route path="/training-request" element={<TrainingRequestPage />} />
+        <Route path="/employee-request" element={<EmployeeRequestPage />} />
         
         {/* Protected routes */}
         <Route path="/" element={
