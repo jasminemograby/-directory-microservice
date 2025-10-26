@@ -49,17 +49,12 @@ jobs:
       with:
         node-version: '18'
         
-    - name: Install backend dependencies
+    - name: Deploy to Railway using Railway CLI
       run: |
+        npm install -g @railway/cli
+        echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
         cd backend
-        npm install
-        
-            - name: Deploy to Railway using Railway CLI
-              run: |
-                npm install -g @railway/cli
-                echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
-                cd backend
-                railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
+        railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
 
   # Health check after deployment
   health-check:
