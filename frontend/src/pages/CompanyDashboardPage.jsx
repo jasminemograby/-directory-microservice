@@ -900,4 +900,3 @@ const CompanyDashboardPage = () => {
 }
 
 export default CompanyDashboardPage
-export default CompanyDashboardPage
