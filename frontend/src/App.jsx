@@ -28,7 +28,7 @@ function App() {
         } />
         
         <Route path="/directory" element={<DirectoryDashboardPage />} />
-        <Route path="/register-company" element={<RegisterCompanyPage />} />
+        <Route path="/register-company" element={<CompanyRegistrationPage />} />
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         
         {/* Protected routes */}

@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Building2, Users, CheckCircle, Clock, Plus, Grid, List } from 'lucide-react';
 import { mockCompanies, industries, companyStats } from '../data/mockCompanies';
 
 const DirectoryDashboardPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -143,7 +145,10 @@ const DirectoryDashboardPage = () => {
               Discover and connect with companies in our platform
             </p>
           </div>
-          <button className="register-company-btn">
+          <button 
+            className="register-company-btn"
+            onClick={() => navigate('/register-company')}
+          >
             <Plus className="h-5 w-5" />
             Register Your Company
           </button>
