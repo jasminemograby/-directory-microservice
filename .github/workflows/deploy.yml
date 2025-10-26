@@ -21,12 +21,11 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
         
     - name: Install frontend dependencies
       run: |
         cd frontend
-        npm ci
+        npm install
         
     - name: Build frontend
       run: |
@@ -37,7 +36,6 @@ jobs:
       uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         working-directory: ./frontend
         vercel-args: '--prod'
@@ -55,48 +53,19 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
         
     - name: Install backend dependencies
       run: |
         cd backend
-        npm ci
+        npm install
         
-    - name: Deploy to Railway
-      uses: railwayapp/railway-deploy@v1
-      with:
-        railway-token: ${{ secrets.RAILWAY_TOKEN }}
-        service: backend
-        working-directory: ./backend
+    - name: Deploy to Railway using Railway CLI
+      run: |
+        npm install -g @railway/cli
+        railway login --token ${{ secrets.RAILWAY_TOKEN }}
+        cd backend
+        railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
 
-  # Database migration (optional)
-  migrate-database:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies
-      run: |
-        cd backend
-        npm ci
-        
-    - name: Run database migrations
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      run: |
-        cd backend
-        # Add migration script here when ready
-        echo "Database migrations would run here"
-        
   # Health check after deployment
   health-check:
     runs-on: ubuntu-latest
@@ -112,8 +81,8 @@ jobs:
       
     - name: Health check backend
       run: |
-        curl -f ${{ secrets.BACKEND_URL }}/health || exit 1
+        curl -f https://directory-microservice-backend-production.up.railway.app/health || exit 1
         
     - name: Health check frontend
       run: |
-        curl -f ${{ secrets.FRONTEND_URL }} || exit 1
+        curl -f https://directory-microservice-frontend.vercel.app/ || exit 1
