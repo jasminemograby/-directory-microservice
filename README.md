@@ -67,4 +67,4 @@ See `.env.example` files in frontend and backend directories for required enviro
 ✅ GitHub Actions configured  
 ✅ API integration working  
 
-**Last updated**: 2025-10-26
+**Last updated**: 2025-10-26 - Fixed routing and deployment issues
