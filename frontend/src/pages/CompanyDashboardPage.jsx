@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useCompanyStore } from '../stores/companyStore'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from '../components/ThemeToggle'
 import { 
   Building2, Users, Plus, UserPlus, Settings, BarChart3, Calendar, 
   CheckCircle, Edit, Trash2, ChevronDown, ChevronRight, User, 
-  Crown, Award, Target, GraduationCap
+  Crown, Award, Target, GraduationCap, Eye, ArrowRight, List
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const CompanyDashboardPage = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const { companies, fetchCompanies, isLoading } = useCompanyStore()
   const { isDarkMode } = useTheme()
   const [activeTab, setActiveTab] = useState('overview')
@@ -174,6 +175,24 @@ const CompanyDashboardPage = () => {
     }))
   }
 
+  const handleViewAllEmployees = () => {
+    navigate('/employees', { 
+      state: { 
+        companyData: companyData || currentCompany,
+        employees: employees
+      } 
+    })
+  }
+
+  const handleViewEmployeeProfile = (employee) => {
+    navigate(`/employee/${employee.id}`, { 
+      state: { 
+        employee, 
+        companyData: companyData || currentCompany
+      } 
+    })
+  }
+
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--bg-primary)' }}>
       {/* Theme Toggle */}
@@ -295,13 +314,30 @@ const CompanyDashboardPage = () => {
                   boxShadow: 'var(--shadow-card)'
                 }}
               >
-                <div className="flex items-center">
-                  <Users className="h-8 w-8 mr-4" style={{ color: 'var(--accent-green)' }} />
-                  <div>
-                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Employees</h3>
-                    <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{employees.length}</p>
-                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total active employees</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Users className="h-8 w-8 mr-4" style={{ color: 'var(--accent-green)' }} />
+                    <div>
+                      <h3 className="text-lg font-medium" style={{ color: 'var(--text-primary)' }}>Employees</h3>
+                      <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{employees.length}</p>
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total active employees</p>
+                    </div>
                   </div>
+                  <button 
+                    onClick={handleViewAllEmployees}
+                    className="btn btn-sm btn-secondary"
+                    style={{
+                      background: 'var(--bg-card)',
+                      color: 'var(--text-primary)',
+                      border: '1px solid var(--bg-secondary)',
+                      borderRadius: '8px',
+                      padding: 'var(--spacing-xs) var(--spacing-sm)',
+                      fontSize: '0.75rem',
+                      fontWeight: '500'
+                    }}
+                  >
+                    View All
+                  </button>
                 </div>
               </div>
 
@@ -358,7 +394,24 @@ const CompanyDashboardPage = () => {
                 boxShadow: 'var(--shadow-card)'
               }}
             >
-              <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Manage Employees</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Manage Employees</h2>
+                <button 
+                  className="btn btn-secondary inline-flex items-center px-4 py-2 text-sm font-medium"
+                  onClick={handleViewAllEmployees}
+                  style={{
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-primary)',
+                    border: '2px solid var(--bg-secondary)',
+                    borderRadius: '12px',
+                    boxShadow: 'var(--shadow-card)'
+                  }}
+                >
+                  <List className="h-4 w-4 mr-2" />
+                  View All Employees
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </button>
+              </div>
 
               {/* Add Employee Form */}
               <form onSubmit={handleAddEmployee} className="mb-8 p-4 rounded-lg" style={{ 
@@ -606,6 +659,14 @@ const CompanyDashboardPage = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button 
+                            onClick={() => handleViewEmployeeProfile(employee)}
+                            className="mr-3 hover:opacity-70" 
+                            style={{ color: 'var(--primary-blue)' }}
+                            title="View Profile"
+                          >
+                            <Eye className="h-5 w-5" />
+                          </button>
                           <button className="mr-3 hover:opacity-70" style={{ color: 'var(--primary-cyan)' }}>
                             <Edit className="h-5 w-5" />
                           </button>
