@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCompanyStore } from '../stores/companyStore'
-import { Building2, Users, CheckCircle, AlertCircle, Mail, Phone } from 'lucide-react'
+import { Building2, Users, CheckCircle, AlertCircle, Mail, Phone, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const RegisterCompanyPage = () => {
@@ -16,24 +16,16 @@ const RegisterCompanyPage = () => {
       phone: '',
     },
   })
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [createdCompany, setCreatedCompany] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const result = await createCompany(formData)
     if (result.success) {
+      setIsSuccess(true)
+      setCreatedCompany(result.data)
       toast.success('Company registration submitted successfully!')
-      // Reset form
-      setFormData({
-        name: '',
-        domain: '',
-        industry: '',
-        size: '',
-        hrContact: {
-          name: '',
-          email: '',
-          phone: '',
-        },
-      })
     }
   }
 
@@ -75,6 +67,82 @@ const RegisterCompanyPage = () => {
     '501-1000',
     '1000+',
   ]
+
+  // Success screen
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-green-100">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <h1 className="mt-4 text-3xl font-extrabold text-gray-900">
+              Company Verified Successfully!
+            </h1>
+            <p className="mt-2 text-lg text-gray-600">
+              Your company has been registered and verified. You can now start managing your team.
+            </p>
+          </div>
+
+          <div className="bg-white shadow rounded-lg p-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Welcome to {createdCompany?.name || formData.name}!
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Your company is now part of our directory. Let's set up your team and training programs.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="p-6 border border-gray-200 rounded-lg">
+                  <Users className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Add Employees</h3>
+                  <p className="text-gray-600 text-sm">
+                    Import your team members and their profiles
+                  </p>
+                </div>
+                
+                <div className="p-6 border border-gray-200 rounded-lg">
+                  <Building2 className="h-8 w-8 text-green-600 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Setup Training</h3>
+                  <p className="text-gray-600 text-sm">
+                    Create training programs and track progress
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => window.location.href = '/login'}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                
+                <button
+                  onClick={() => {
+                    setIsSuccess(false)
+                    setFormData({
+                      name: '',
+                      domain: '',
+                      industry: '',
+                      size: '',
+                      hrContact: { name: '', email: '', phone: '' },
+                    })
+                  }}
+                  className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Register Another Company
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

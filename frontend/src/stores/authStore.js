@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import toast from 'react-hot-toast'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://directory-microservice-backend-production.up.railway.app/api'
+
 const useAuthStore = create(
   persist(
     (set, get) => ({
@@ -15,7 +17,28 @@ const useAuthStore = create(
       login: async (email, password) => {
         set({ isLoading: true })
         try {
-          const response = await fetch('/api/auth/login', {
+          // For demo purposes, allow demo credentials without API call
+          if (email === 'demo@techcorp.com' && password === 'demo123') {
+            const demoUser = {
+              id: 'demo_user',
+              email: 'demo@techcorp.com',
+              name: 'Demo User',
+              role: 'hr_admin',
+              companyId: 'comp_001',
+              permissions: ['read_employees', 'manage_training', 'view_analytics']
+            }
+            
+            set({
+              user: demoUser,
+              token: 'demo_token_123',
+              isAuthenticated: true,
+              isLoading: false,
+            })
+            toast.success('Demo login successful!')
+            return { success: true }
+          }
+
+          const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -49,7 +72,7 @@ const useAuthStore = create(
       register: async (userData) => {
         set({ isLoading: true })
         try {
-          const response = await fetch('/api/auth/register', {
+          const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -82,7 +105,7 @@ const useAuthStore = create(
 
       logout: async () => {
         try {
-          await fetch('/api/auth/logout', {
+          await fetch(`${API_BASE_URL}/auth/logout`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${get().token}`,
@@ -103,7 +126,7 @@ const useAuthStore = create(
 
       refreshUser: async () => {
         try {
-          const response = await fetch('/api/auth/me', {
+          const response = await fetch(`${API_BASE_URL}/auth/me`, {
             headers: {
               'Authorization': `Bearer ${get().token}`,
             },
