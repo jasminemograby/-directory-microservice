@@ -332,13 +332,6 @@ const EmployeeProfilePage = () => {
           <div className="skills-header">
             <Zap className="h-6 w-6" style={{ color: 'var(--primary-purple)' }} />
             <h2>Skills Overview</h2>
-            <button 
-              className="skill-gap-btn"
-              onClick={() => setShowSkillGapModal(true)}
-            >
-              <AlertCircle className="h-4 w-4" />
-              View Skill Gaps
-            </button>
           </div>
           
           <div className="skills-stats">
@@ -381,6 +374,53 @@ const EmployeeProfilePage = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Value Proposition Section */}
+        <div className="value-proposition-card">
+          <div className="value-header">
+            <Target className="h-6 w-6" style={{ color: 'var(--accent-gold)' }} />
+            <h2>Value Proposition</h2>
+          </div>
+          
+          <div className="value-content">
+            <div className="value-item">
+              <div className="value-icon">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <div className="value-text">
+                <h3>Career Growth Potential</h3>
+                <p>Strong foundation in core technologies with clear path to {employee.targetRole || 'senior roles'}</p>
+              </div>
+            </div>
+            
+            <div className="value-item">
+              <div className="value-icon">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div className="value-text">
+                <h3>Learning Velocity</h3>
+                <p>{employee.coursesCompleted || 0} courses completed with {Math.round(mockSkills.reduce((sum, s) => sum + s.progress, 0) / mockSkills.length)}% average skill progress</p>
+              </div>
+            </div>
+            
+            <div className="value-item">
+              <div className="value-icon">
+                <AlertCircle className="h-5 w-5" />
+              </div>
+              <div className="value-text">
+                <h3>Development Opportunities</h3>
+                <p>Identified skill gaps provide clear learning roadmap for career advancement</p>
+                <button 
+                  className="skill-gap-btn"
+                  onClick={() => setShowSkillGapModal(true)}
+                >
+                  <AlertCircle className="h-4 w-4" />
+                  View Skill Gap Analysis
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
