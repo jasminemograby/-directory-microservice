@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterCompanyPage from './pages/RegisterCompanyPage'
 import CompanyRegistrationPage from './pages/CompanyRegistrationPage'
 import CompanyVerificationPage from './pages/CompanyVerificationPage'
+import CompanySetupPage from './pages/CompanySetupPage'
 import CompanyDashboardPage from './pages/CompanyDashboardPage'
 import DirectoryDashboardPage from './pages/DirectoryDashboardPage'
 import EmployeePage from './pages/EmployeePage'
@@ -32,6 +33,7 @@ function App() {
         <Route path="/directory" element={<DirectoryDashboardPage />} />
         <Route path="/register-company" element={<CompanyRegistrationPage />} />
         <Route path="/company-verification" element={<CompanyVerificationPage />} />
+        <Route path="/company-setup" element={<CompanySetupPage />} />
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         
         {/* Protected routes */}
