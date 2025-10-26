@@ -2,6 +2,10 @@
 
 A company directory & HR training orchestrator built with React, Node.js, and PostgreSQL.
 
+## 🚀 **Live URLs**
+- **Frontend**: https://directory-microservice-frontend.vercel.app/
+- **Backend**: https://directory-microservice-backend-production.up.railway.app/
+
 ## Architecture
 
 This project follows the Onion Architecture pattern:
@@ -57,8 +61,10 @@ npm run deploy
 
 See `.env.example` files in frontend and backend directories for required environment variables.
 
-## Deployment
+## 🚀 **Deployment Status**
+✅ Frontend deployed to Vercel  
+✅ Backend deployed to Railway  
+✅ GitHub Actions configured  
+✅ API integration working  
 
-- Frontend: https://directory-microservice.vercel.app
-- Backend: https://directory-microservice.railway.app
-- Database: Supabase PostgreSQL
+**Last updated**: 2025-10-26
