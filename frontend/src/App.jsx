@@ -17,6 +17,7 @@ import TrainingRequestPage from './pages/TrainingRequestPage'
 import EmployeeRequestPage from './pages/EmployeeRequestPage'
 import ErrorRollbackPage from './pages/ErrorRollbackPage'
 import TrainerProfilePage from './pages/TrainerProfilePage'
+import HRChoicePage from './pages/HRChoicePage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
 import InstructorsPage from './pages/InstructorsPage'
@@ -49,6 +50,7 @@ function App() {
         <Route path="/employee-request" element={<EmployeeRequestPage />} />
         <Route path="/error-rollback" element={<ErrorRollbackPage />} />
         <Route path="/trainer/:id" element={<TrainerProfilePage />} />
+        <Route path="/hr-choice" element={<HRChoicePage />} />
         
         {/* Protected routes */}
         <Route path="/" element={

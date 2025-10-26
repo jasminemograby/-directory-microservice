@@ -1,21 +1,39 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from '../components/ThemeToggle'
-import { Eye, EyeOff, Building2, Mail, Lock, ArrowRight } from 'lucide-react'
+import { Eye, EyeOff, Building2, Mail, Lock, ArrowRight, Shield, Users, GraduationCap } from 'lucide-react'
+import { demoCredentials } from '../data/mockUsers'
 
 const LoginPage = () => {
   const { login, isLoading } = useAuthStore()
   const { isDarkMode } = useTheme()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   })
   const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await login(formData.email, formData.password)
+    const result = await login(formData.username, formData.password)
+    
+    if (result.success) {
+      // Navigate based on role
+      navigate(result.redirectTo, { replace: true })
+    }
+  }
+
+  const handleDemoLogin = async (role) => {
+    const credentials = demoCredentials[role]
+    if (credentials) {
+      const result = await login(credentials.username, credentials.password)
+      if (result.success) {
+        navigate(result.redirectTo, { replace: true })
+      }
+    }
   }
 
   const handleChange = (e) => {
@@ -61,20 +79,20 @@ const LoginPage = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-                  Email Address
+                <label htmlFor="username" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+                  Username
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5" style={{ color: 'var(--text-muted)' }} />
+                    <User className="h-5 w-5" style={{ color: 'var(--text-muted)' }} />
                   </div>
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
+                    id="username"
+                    name="username"
+                    type="text"
+                    autoComplete="username"
                     required
-                    value={formData.email}
+                    value={formData.username}
                     onChange={handleChange}
                     className="w-full pl-10 pr-3 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
                     style={{
@@ -166,22 +184,87 @@ const LoginPage = () => {
           </form>
         </div>
 
-        {/* Demo credentials */}
+        {/* Demo Credentials */}
         <div 
-          className="p-4 rounded-lg"
+          className="card mt-6"
           style={{ 
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--bg-tertiary)'
+            background: 'var(--gradient-card)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            padding: 'var(--spacing-lg)',
+            boxShadow: 'var(--shadow-card)'
           }}
         >
-          <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-            🚀 Demo Credentials:
-          </h3>
-          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            <strong>Email:</strong> demo@techcorp.com<br />
-            <strong>Password:</strong> demo123
-          </p>
+          <div className="text-center mb-4">
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+              Demo Credentials
+            </h3>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+              Try different roles to see the platform features
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => handleDemoLogin('admin')}
+              className="demo-btn"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--bg-tertiary)',
+                color: 'var(--text-primary)'
+              }}
+            >
+              <Shield className="h-4 w-4" style={{ color: 'var(--error-red)' }} />
+              <span>Admin</span>
+            </button>
+            
+            <button
+              onClick={() => handleDemoLogin('hr')}
+              className="demo-btn"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--bg-tertiary)',
+                color: 'var(--text-primary)'
+              }}
+            >
+              <Users className="h-4 w-4" style={{ color: 'var(--primary-blue)' }} />
+              <span>HR Manager</span>
+            </button>
+            
+            <button
+              onClick={() => handleDemoLogin('manager')}
+              className="demo-btn"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--bg-tertiary)',
+                color: 'var(--text-primary)'
+              }}
+            >
+              <Building2 className="h-4 w-4" style={{ color: 'var(--accent-green)' }} />
+              <span>Manager</span>
+            </button>
+            
+            <button
+              onClick={() => handleDemoLogin('trainer')}
+              className="demo-btn"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--bg-tertiary)',
+                color: 'var(--text-primary)'
+              }}
+            >
+              <GraduationCap className="h-4 w-4" style={{ color: 'var(--primary-purple)' }} />
+              <span>Trainer</span>
+            </button>
+          </div>
+          
+          <div className="mt-3 text-center">
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              All demo accounts use password: role123 (e.g., admin123, hr123)
+            </p>
+          </div>
         </div>
+
       </div>
     </div>
   )
