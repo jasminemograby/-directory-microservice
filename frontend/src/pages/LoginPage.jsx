@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from '../components/ThemeToggle'
-import { Eye, EyeOff, Building2, Mail, Lock, ArrowRight, Shield, Users, GraduationCap } from 'lucide-react'
+import { Eye, EyeOff, Building2, Mail, Lock, ArrowRight, Shield, Users, GraduationCap, User } from 'lucide-react'
 import { demoCredentials } from '../data/mockUsers'
 
 const LoginPage = () => {
   const { login, isLoading } = useAuthStore()
   const { isDarkMode } = useTheme()
   const navigate = useNavigate()
+
+  console.log('LoginPage rendered')
   const [formData, setFormData] = useState({
     username: '',
     password: '',

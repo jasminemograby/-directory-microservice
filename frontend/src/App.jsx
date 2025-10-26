@@ -29,7 +29,9 @@ function App() {
   const { isAuthenticated } = useAuthStore()
 
   // Debug: Log if app is loading
-  console.log('App component loaded, isAuthenticated:', isAuthenticated)
+  console.log('✅ App component loaded')
+  console.log('✅ isAuthenticated:', isAuthenticated)
+  console.log('✅ Current URL:', window.location.pathname)
 
   return (
     <ThemeProvider>
