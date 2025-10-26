@@ -24,7 +24,10 @@ const CompanyDashboardPage = () => {
     email: '',
     position: '',
     department: '',
-    phone: ''
+    team: '',
+    phone: '',
+    trainerType: 'regular',
+    targetRole: ''
   })
 
   useEffect(() => {
@@ -74,7 +77,10 @@ const CompanyDashboardPage = () => {
       email: '',
       position: '',
       department: '',
-      phone: ''
+      team: '',
+      phone: '',
+      trainerType: 'regular',
+      targetRole: ''
     })
     toast.success('Employee added successfully!')
   }
@@ -142,6 +148,30 @@ const CompanyDashboardPage = () => {
       default:
         return 'Regular Employee'
     }
+  }
+
+  const getAvailableDepartments = () => {
+    return currentCompany.departments?.map(dept => ({
+      value: dept.name,
+      label: dept.name
+    })) || []
+  }
+
+  const getAvailableTeams = (departmentName) => {
+    if (!departmentName) return []
+    const department = currentCompany.departments?.find(dept => dept.name === departmentName)
+    return department?.teams?.map(team => ({
+      value: team.name,
+      label: team.name
+    })) || []
+  }
+
+  const handleDepartmentChange = (departmentName) => {
+    setNewEmployee(prev => ({
+      ...prev,
+      department: departmentName,
+      team: '' // Reset team when department changes
+    }))
   }
 
   return (
@@ -405,9 +435,8 @@ const CompanyDashboardPage = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="department" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Department</label>
-                    <input
-                      type="text"
+                    <label htmlFor="department" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Department *</label>
+                    <select
                       id="department"
                       className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
                       style={{
@@ -417,8 +446,39 @@ const CompanyDashboardPage = () => {
                         focusRingColor: 'var(--primary-cyan)'
                       }}
                       value={newEmployee.department}
-                      onChange={(e) => setNewEmployee({ ...newEmployee, department: e.target.value })}
-                    />
+                      onChange={(e) => handleDepartmentChange(e.target.value)}
+                      required
+                    >
+                      <option value="">Select Department</option>
+                      {getAvailableDepartments().map(dept => (
+                        <option key={dept.value} value={dept.value}>
+                          {dept.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="team" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Team</label>
+                    <select
+                      id="team"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.team}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, team: e.target.value })}
+                      disabled={!newEmployee.department}
+                    >
+                      <option value="">Select Team (Optional)</option>
+                      {getAvailableTeams(newEmployee.department).map(team => (
+                        <option key={team.value} value={team.value}>
+                          {team.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Phone</label>
@@ -434,6 +494,42 @@ const CompanyDashboardPage = () => {
                       }}
                       value={newEmployee.phone}
                       onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="trainerType" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Employee Type</label>
+                    <select
+                      id="trainerType"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      value={newEmployee.trainerType}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, trainerType: e.target.value })}
+                    >
+                      <option value="regular">Regular Employee</option>
+                      <option value="internal">Internal Trainer</option>
+                      <option value="external">External Trainer</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="targetRole" className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Target Role</label>
+                    <input
+                      type="text"
+                      id="targetRole"
+                      className="w-full py-3 px-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                      style={{
+                        background: 'var(--bg-primary)',
+                        borderColor: 'var(--bg-tertiary)',
+                        color: 'var(--text-primary)',
+                        focusRingColor: 'var(--primary-cyan)'
+                      }}
+                      placeholder="e.g., Senior Developer in 6 months"
+                      value={newEmployee.targetRole}
+                      onChange={(e) => setNewEmployee({ ...newEmployee, targetRole: e.target.value })}
                     />
                   </div>
                 </div>
@@ -465,6 +561,12 @@ const CompanyDashboardPage = () => {
                         Department
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        Team
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                         Status
                       </th>
                       <th scope="col" className="relative px-6 py-3">
@@ -486,6 +588,15 @@ const CompanyDashboardPage = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
                           {employee.department}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          {employee.team || '-'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <div className="flex items-center gap-2">
+                            {getTrainerIcon(employee.trainerType)}
+                            <span className="text-xs">{getTrainerLabel(employee.trainerType)}</span>
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--text-secondary)' }}>
                           <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -602,7 +713,7 @@ const CompanyDashboardPage = () => {
                                   {expandedNodes.has(`team-${deptIndex}-${teamIndex}`) && (
                                     <div className="employees-container">
                                       {employees
-                                        .filter(emp => emp.department === dept.name)
+                                        .filter(emp => emp.department === dept.name && emp.team === team.name)
                                         .map((emp, empIndex) => (
                                         <div key={emp.id} className="employee-branch">
                                           <div className="branch-line"></div>
@@ -634,7 +745,7 @@ const CompanyDashboardPage = () => {
                           {expandedNodes.has(`dept-${deptIndex}`) && (
                             <div className="department-employees">
                               {employees
-                                .filter(emp => emp.department === dept.name && !dept.teams?.some(team => team.name === emp.department))
+                                .filter(emp => emp.department === dept.name && !emp.team)
                                 .map((emp) => (
                                 <div key={emp.id} className="employee-branch">
                                   <div className="branch-line"></div>
