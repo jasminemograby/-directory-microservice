@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import toast from 'react-hot-toast'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://directory-microservice-backend-production.up.railway.app/api'
+
 const useCompanyStore = create((set, get) => ({
   // State
   companies: [],
@@ -12,7 +14,7 @@ const useCompanyStore = create((set, get) => ({
   fetchCompanies: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch('/api/companies')
+      const response = await fetch(`${API_BASE_URL}/companies`)
       const data = await response.json()
 
       if (data.success) {
@@ -34,7 +36,7 @@ const useCompanyStore = create((set, get) => ({
   fetchCompany: async (id) => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch(`/api/companies/${id}`)
+      const response = await fetch(`${API_BASE_URL}/companies/${id}`)
       const data = await response.json()
 
       if (data.success) {
@@ -56,7 +58,7 @@ const useCompanyStore = create((set, get) => ({
   createCompany: async (companyData) => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch('/api/companies', {
+      const response = await fetch(`${API_BASE_URL}/companies`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ const useCompanyStore = create((set, get) => ({
   updateCompany: async (id, updates) => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch(`/api/companies/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/companies/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +129,7 @@ const useCompanyStore = create((set, get) => ({
   verifyCompany: async (id, method = 'manual_review') => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch(`/api/companies/${id}/verify`, {
+      const response = await fetch(`${API_BASE_URL}/companies/${id}/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +158,7 @@ const useCompanyStore = create((set, get) => ({
   deleteCompany: async (id) => {
     set({ isLoading: true, error: null })
     try {
-      const response = await fetch(`/api/companies/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/companies/${id}`, {
         method: 'DELETE',
       })
 
