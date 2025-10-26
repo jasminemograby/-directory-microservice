@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://directory-microservice-backend-production.up.railway.app/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -17,6 +17,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://directory-microservice.railway.app/api"
+    "VITE_API_URL": "https://directory-microservice-backend-production.up.railway.app/api"
   }
 }
