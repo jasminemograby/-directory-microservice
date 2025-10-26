@@ -14,9 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         toastOptions={{
           duration: 4000,
           style: {
-            background: 'hsl(var(--card))',
-            color: 'hsl(var(--card-foreground))',
-            border: '1px solid hsl(var(--border))',
+            background: 'var(--bg-card, #1e1e1e)',
+            color: 'var(--text-primary, #ffffff)',
+            border: '1px solid var(--bg-tertiary, #2a2a2a)',
           },
         }}
       />
