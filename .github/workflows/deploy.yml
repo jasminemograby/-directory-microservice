@@ -52,7 +52,7 @@ jobs:
     - name: Deploy to Railway using Railway CLI
       run: |
         npm install -g @railway/cli
-        echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
+        echo "${{ secrets.RAILWAY_TOKEN }}" | railway login
         cd backend
         railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
 
