@@ -38,10 +38,52 @@ async function tryWithFallback(serviceName, endpoint, payload = null, realApiCal
 
 async function loadMockData(serviceName, endpoint) {
   try {
-    const mockFilePath = path.join(__dirname, '..', '..', 'mock-data.json');
-    const mockData = await fs.readFile(mockFilePath, 'utf8');
-    const parsedData = JSON.parse(mockData);
-    return parsedData[serviceName] || parsedData;
+    // Try multiple possible paths for mock data
+    const possiblePaths = [
+      path.join(__dirname, '..', '..', '..', 'mock-data.json'), // From routes to backend root
+      path.join(__dirname, '..', '..', 'mock-data.json'), // Alternative path
+      path.join(process.cwd(), 'mock-data.json'), // Current working directory
+      path.join(process.cwd(), 'backend', 'mock-data.json') // Backend directory
+    ];
+    
+    for (const mockFilePath of possiblePaths) {
+      try {
+        const mockData = await fs.readFile(mockFilePath, 'utf8');
+        const parsedData = JSON.parse(mockData);
+        console.log(`[SUCCESS] Loaded mock data from: ${mockFilePath}`);
+        return parsedData[serviceName] || parsedData;
+      } catch (pathError) {
+        console.log(`[DEBUG] Failed to load from ${mockFilePath}: ${pathError.message}`);
+        continue;
+      }
+    }
+    
+    // If no path works, return sample data
+    console.log(`[FALLBACK] Using hardcoded sample data for ${serviceName}`);
+    return {
+      companies: [
+        {
+          id: 1,
+          name: "TechCorp Solutions",
+          industry: "Technology",
+          size: "50-200",
+          location: "San Francisco, CA",
+          website: "https://techcorp.com",
+          contactEmail: "contact@techcorp.com",
+          createdAt: "2024-01-15T10:00:00Z"
+        },
+        {
+          id: 2,
+          name: "Global Innovations Inc",
+          industry: "Consulting",
+          size: "200-500",
+          location: "New York, NY",
+          website: "https://globalinnovations.com",
+          contactEmail: "info@globalinnovations.com",
+          createdAt: "2024-02-20T14:30:00Z"
+        }
+      ]
+    };
   } catch (error) {
     console.error(`Failed to load mock data for ${serviceName}:`, error);
     return { error: 'Mock data not available' };
