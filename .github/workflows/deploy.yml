@@ -26,18 +26,13 @@ jobs:
         cd frontend
         npm install
         
-    - name: Build frontend
-      run: |
-        cd frontend
-        npm run build
-        
     - name: Deploy to Vercel
       uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./
+        working-directory: ./frontend
         vercel-args: '--prod'
 
   # Backend deployment to Railway
@@ -59,12 +54,12 @@ jobs:
         cd backend
         npm install
         
-    - name: Deploy to Railway using Railway CLI
-      run: |
-        npm install -g @railway/cli
-        echo "${{ secrets.RAILWAY_TOKEN }}" | railway login
-        cd backend
-        railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
+            - name: Deploy to Railway using Railway CLI
+              run: |
+                npm install -g @railway/cli
+                echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
+                cd backend
+                railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
 
   # Health check after deployment
   health-check:
