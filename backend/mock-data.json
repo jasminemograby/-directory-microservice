@@ -1,0 +1,215 @@
+{
+  "companies": [
+    {
+      "id": "comp_001",
+      "name": "TechCorp Solutions",
+      "domain": "techcorp.com",
+      "industry": "Technology",
+      "size": "500-1000",
+      "status": "verified",
+      "createdAt": "2024-01-15T10:00:00Z",
+      "hrContact": {
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@techcorp.com",
+        "phone": "+1-555-0123"
+      },
+      "verification": {
+        "status": "verified",
+        "verifiedAt": "2024-01-20T14:30:00Z",
+        "method": "domain_verification"
+      }
+    },
+    {
+      "id": "comp_002",
+      "name": "InnovateLabs",
+      "domain": "innovatelabs.io",
+      "industry": "Research & Development",
+      "size": "50-200",
+      "status": "pending",
+      "createdAt": "2024-02-01T09:15:00Z",
+      "hrContact": {
+        "name": "Michael Chen",
+        "email": "michael.chen@innovatelabs.io",
+        "phone": "+1-555-0456"
+      },
+      "verification": {
+        "status": "pending",
+        "verifiedAt": null,
+        "method": "manual_review"
+      }
+    }
+  ],
+  "employees": [
+    {
+      "id": "emp_001",
+      "companyId": "comp_001",
+      "personalInfo": {
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@techcorp.com",
+        "phone": "+1-555-0789",
+        "position": "Senior Software Engineer",
+        "department": "Engineering",
+        "hireDate": "2023-06-15T00:00:00Z"
+      },
+      "profile": {
+        "linkedinUrl": "https://linkedin.com/in/johnsmith",
+        "githubUrl": "https://github.com/johnsmith",
+        "bio": "Passionate software engineer with 5+ years of experience in full-stack development",
+        "skills": ["JavaScript", "React", "Node.js", "Python", "AWS"],
+        "certifications": ["AWS Certified Developer", "React Professional"],
+        "education": "Bachelor's in Computer Science",
+        "experience": "5 years"
+      },
+      "enrichment": {
+        "lastEnriched": "2024-01-25T16:45:00Z",
+        "sources": ["linkedin", "github", "credly"],
+        "relevanceScore": 0.92,
+        "valueProposition": "Full-stack developer with strong cloud expertise and modern framework knowledge"
+      },
+      "status": "active",
+      "createdAt": "2023-06-15T00:00:00Z",
+      "updatedAt": "2024-01-25T16:45:00Z"
+    },
+    {
+      "id": "emp_002",
+      "companyId": "comp_001",
+      "personalInfo": {
+        "firstName": "Emily",
+        "lastName": "Davis",
+        "email": "emily.davis@techcorp.com",
+        "phone": "+1-555-0321",
+        "position": "Product Manager",
+        "department": "Product",
+        "hireDate": "2023-08-20T00:00:00Z"
+      },
+      "profile": {
+        "linkedinUrl": "https://linkedin.com/in/emilydavis",
+        "githubUrl": null,
+        "bio": "Strategic product manager focused on user experience and data-driven decisions",
+        "skills": ["Product Management", "Agile", "User Research", "Analytics", "Leadership"],
+        "certifications": ["Certified Scrum Master", "Google Analytics"],
+        "education": "MBA in Technology Management",
+        "experience": "7 years"
+      },
+      "enrichment": {
+        "lastEnriched": "2024-01-20T11:20:00Z",
+        "sources": ["linkedin", "orcid"],
+        "relevanceScore": 0.88,
+        "valueProposition": "Experienced product leader with strong analytical skills and user-centric approach"
+      },
+      "status": "active",
+      "createdAt": "2023-08-20T00:00:00Z",
+      "updatedAt": "2024-01-20T11:20:00Z"
+    }
+  ],
+  "trainingRequests": [
+    {
+      "id": "tr_001",
+      "employeeId": "emp_001",
+      "companyId": "comp_001",
+      "type": "personalized",
+      "title": "Advanced React Patterns",
+      "description": "Learn advanced React patterns including hooks, context, and performance optimization",
+      "skills": ["React", "JavaScript", "Performance"],
+      "priority": "high",
+      "requestedBy": "emp_001",
+      "approvedBy": "emp_002",
+      "status": "approved",
+      "requestedAt": "2024-01-10T14:30:00Z",
+      "approvedAt": "2024-01-12T09:15:00Z",
+      "scheduledFor": "2024-02-15T10:00:00Z",
+      "instructor": {
+        "id": "inst_001",
+        "name": "Alex Rodriguez",
+        "specialties": ["React", "JavaScript", "Frontend"],
+        "rating": 4.8,
+        "status": "active"
+      }
+    },
+    {
+      "id": "tr_002",
+      "employeeId": null,
+      "companyId": "comp_001",
+      "type": "group",
+      "title": "Cloud Security Best Practices",
+      "description": "Department-wide training on AWS security best practices and compliance",
+      "skills": ["AWS", "Security", "Compliance"],
+      "priority": "medium",
+      "requestedBy": "emp_002",
+      "approvedBy": null,
+      "status": "pending",
+      "requestedAt": "2024-01-28T16:00:00Z",
+      "approvedAt": null,
+      "scheduledFor": null,
+      "instructor": null
+    }
+  ],
+  "instructors": [
+    {
+      "id": "inst_001",
+      "name": "Alex Rodriguez",
+      "email": "alex.rodriguez@techcorp.com",
+      "specialties": ["React", "JavaScript", "Frontend", "Node.js"],
+      "rating": 4.8,
+      "totalTrainings": 45,
+      "status": "active",
+      "bio": "Senior frontend developer with 8+ years of experience in modern JavaScript frameworks",
+      "certifications": ["React Professional", "AWS Certified Developer"],
+      "joinedAt": "2023-03-01T00:00:00Z"
+    },
+    {
+      "id": "inst_002",
+      "name": "Maria Garcia",
+      "email": "maria.garcia@techcorp.com",
+      "specialties": ["Python", "Data Science", "Machine Learning", "SQL"],
+      "rating": 4.9,
+      "totalTrainings": 32,
+      "status": "active",
+      "bio": "Data scientist and ML engineer with expertise in Python and cloud platforms",
+      "certifications": ["Google Cloud Professional", "Python Institute"],
+      "joinedAt": "2023-05-15T00:00:00Z"
+    }
+  ],
+  "hrUsers": [
+    {
+      "id": "hr_001",
+      "companyId": "comp_001",
+      "personalInfo": {
+        "firstName": "Sarah",
+        "lastName": "Johnson",
+        "email": "sarah.johnson@techcorp.com",
+        "phone": "+1-555-0123"
+      },
+      "role": "hr_manager",
+      "permissions": [
+        "view_employees",
+        "edit_employees",
+        "approve_training",
+        "manage_instructors",
+        "view_analytics"
+      ],
+      "status": "active",
+      "createdAt": "2023-01-01T00:00:00Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log_001",
+      "userId": "hr_001",
+      "action": "employee_profile_updated",
+      "resourceType": "employee",
+      "resourceId": "emp_001",
+      "details": {
+        "changes": {
+          "skills": {
+            "old": ["JavaScript", "React", "Node.js"],
+            "new": ["JavaScript", "React", "Node.js", "Python", "AWS"]
+          }
+        }
+      },
+      "timestamp": "2024-01-25T16:45:00Z",
+      "ipAddress": "192.168.1.100"
+    }
+  ]
+}
