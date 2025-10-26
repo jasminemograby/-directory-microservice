@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useCompanyStore } from '../stores/companyStore'
 import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from '../components/ThemeToggle'
-import { Building2, Users, Plus, UserPlus, Settings, BarChart3, Calendar, CheckCircle, Edit, Trash2 } from 'lucide-react'
+import { 
+  Building2, Users, Plus, UserPlus, Settings, BarChart3, Calendar, 
+  CheckCircle, Edit, Trash2, ChevronDown, ChevronRight, User, 
+  Crown, Award, Target, GraduationCap
+} from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const CompanyDashboardPage = () => {
+  const location = useLocation()
   const { companies, fetchCompanies, isLoading } = useCompanyStore()
   const { isDarkMode } = useTheme()
   const [activeTab, setActiveTab] = useState('overview')
   const [employees, setEmployees] = useState([])
+  const [companyData, setCompanyData] = useState(null)
+  const [expandedNodes, setExpandedNodes] = useState(new Set())
   const [newEmployee, setNewEmployee] = useState({
     firstName: '',
     lastName: '',
@@ -21,7 +29,28 @@ const CompanyDashboardPage = () => {
 
   useEffect(() => {
     fetchCompanies()
-  }, [])
+    
+    // Get company data from setup process
+    if (location.state?.companyData) {
+      setCompanyData(location.state.companyData)
+      // Convert setup employees to dashboard format
+      if (location.state.companyData.employees) {
+        const convertedEmployees = location.state.companyData.employees.map(emp => ({
+          id: emp.id,
+          firstName: emp.name.split(' ')[0] || '',
+          lastName: emp.name.split(' ').slice(1).join(' ') || '',
+          email: emp.email,
+          position: emp.currentRole,
+          department: emp.department || 'General',
+          phone: '',
+          status: 'active',
+          trainerType: emp.trainerType,
+          targetRole: emp.targetRole
+        }))
+        setEmployees(convertedEmployees)
+      }
+    }
+  }, [location.state])
 
   const handleAddEmployee = (e) => {
     e.preventDefault()
@@ -50,7 +79,20 @@ const CompanyDashboardPage = () => {
     toast.success('Employee added successfully!')
   }
 
-  const currentCompany = companies[0] || {
+  const currentCompany = companyData ? {
+    id: 'comp_001',
+    name: companyData.companyName,
+    domain: companyData.domain || 'company.com',
+    industry: companyData.industry,
+    size: `${employees.length} employees`,
+    status: 'verified',
+    employeesCount: employees.length,
+    trainingPrograms: 5,
+    pendingRequests: 2,
+    departments: companyData.departments || [],
+    minPassingGrade: companyData.minPassingGrade || 70,
+    requiredQuestions: companyData.requiredQuestions || 10
+  } : (companies[0] || {
     id: 'comp_001',
     name: 'TechCorp Solutions',
     domain: 'techcorp.com',
@@ -60,11 +102,46 @@ const CompanyDashboardPage = () => {
     employeesCount: employees.length,
     trainingPrograms: 5,
     pendingRequests: 2,
-  }
+    departments: [],
+    minPassingGrade: 70,
+    requiredQuestions: 10
+  })
 
   const handleDeleteEmployee = (id) => {
     setEmployees(employees.filter(emp => emp.id !== id))
     toast.success('Employee removed successfully!')
+  }
+
+  const toggleNode = (nodeId) => {
+    const newExpanded = new Set(expandedNodes)
+    if (newExpanded.has(nodeId)) {
+      newExpanded.delete(nodeId)
+    } else {
+      newExpanded.add(nodeId)
+    }
+    setExpandedNodes(newExpanded)
+  }
+
+  const getTrainerIcon = (trainerType) => {
+    switch (trainerType) {
+      case 'internal':
+        return <Crown className="h-4 w-4" style={{ color: 'var(--accent-gold)' }} />
+      case 'external':
+        return <Award className="h-4 w-4" style={{ color: 'var(--primary-blue)' }} />
+      default:
+        return <User className="h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+    }
+  }
+
+  const getTrainerLabel = (trainerType) => {
+    switch (trainerType) {
+      case 'internal':
+        return 'Internal Trainer'
+      case 'external':
+        return 'External Trainer'
+      default:
+        return 'Regular Employee'
+    }
   }
 
   return (
@@ -120,6 +197,20 @@ const CompanyDashboardPage = () => {
               }}
             >
               Employees ({employees.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('hierarchy')}
+              className={`${
+                activeTab === 'hierarchy'
+                  ? 'border-opacity-100'
+                  : 'border-transparent hover:border-opacity-50'
+              } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-all duration-200`}
+              style={{
+                borderColor: activeTab === 'hierarchy' ? 'var(--primary-cyan)' : 'transparent',
+                color: activeTab === 'hierarchy' ? 'var(--primary-cyan)' : 'var(--text-secondary)'
+              }}
+            >
+              Hierarchy
             </button>
             <button
               onClick={() => setActiveTab('training')}
@@ -415,6 +506,170 @@ const CompanyDashboardPage = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'hierarchy' && (
+            <div 
+              className="card"
+              style={{ 
+                background: 'var(--gradient-card)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: 'var(--spacing-lg)',
+                boxShadow: 'var(--shadow-card)'
+              }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                  Company Hierarchy
+                </h2>
+                <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  <div className="flex items-center gap-2">
+                    <Crown className="h-4 w-4" style={{ color: 'var(--accent-gold)' }} />
+                    <span>Internal Trainer</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4" style={{ color: 'var(--primary-blue)' }} />
+                    <span>External Trainer</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+                    <span>Regular Employee</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Company Root */}
+              <div className="hierarchy-tree">
+                <div className="company-root">
+                  <div className="company-node">
+                    <Building2 className="h-6 w-6" style={{ color: 'var(--primary-blue)' }} />
+                    <div className="node-content">
+                      <h3 className="node-title">{currentCompany.name}</h3>
+                      <p className="node-subtitle">{currentCompany.industry} • {currentCompany.size}</p>
+                    </div>
+                  </div>
+
+                  {/* Departments */}
+                  {currentCompany.departments && currentCompany.departments.length > 0 ? (
+                    <div className="departments-container">
+                      {currentCompany.departments.map((dept, deptIndex) => (
+                        <div key={dept.id || deptIndex} className="department-branch">
+                          <div className="branch-line"></div>
+                          <div className="department-node">
+                            <button
+                              className="expand-btn"
+                              onClick={() => toggleNode(`dept-${deptIndex}`)}
+                            >
+                              {expandedNodes.has(`dept-${deptIndex}`) ? 
+                                <ChevronDown className="h-4 w-4" /> : 
+                                <ChevronRight className="h-4 w-4" />
+                              }
+                            </button>
+                            <Users className="h-5 w-5" style={{ color: 'var(--accent-green)' }} />
+                            <div className="node-content">
+                              <h4 className="node-title">{dept.name}</h4>
+                              <p className="node-subtitle">Manager: {dept.manager}</p>
+                            </div>
+                          </div>
+
+                          {/* Teams */}
+                          {expandedNodes.has(`dept-${deptIndex}`) && dept.teams && dept.teams.length > 0 && (
+                            <div className="teams-container">
+                              {dept.teams.map((team, teamIndex) => (
+                                <div key={team.id || teamIndex} className="team-branch">
+                                  <div className="branch-line"></div>
+                                  <div className="team-node">
+                                    <button
+                                      className="expand-btn"
+                                      onClick={() => toggleNode(`team-${deptIndex}-${teamIndex}`)}
+                                    >
+                                      {expandedNodes.has(`team-${deptIndex}-${teamIndex}`) ? 
+                                        <ChevronDown className="h-4 w-4" /> : 
+                                        <ChevronRight className="h-4 w-4" />
+                                      }
+                                    </button>
+                                    <User className="h-4 w-4" style={{ color: 'var(--primary-purple)' }} />
+                                    <div className="node-content">
+                                      <h5 className="node-title">{team.name}</h5>
+                                      <p className="node-subtitle">Lead: {team.lead}</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Employees in Team */}
+                                  {expandedNodes.has(`team-${deptIndex}-${teamIndex}`) && (
+                                    <div className="employees-container">
+                                      {employees
+                                        .filter(emp => emp.department === dept.name)
+                                        .map((emp, empIndex) => (
+                                        <div key={emp.id} className="employee-branch">
+                                          <div className="branch-line"></div>
+                                          <div className="employee-node">
+                                            <div className="employee-icon">
+                                              {getTrainerIcon(emp.trainerType)}
+                                            </div>
+                                            <div className="node-content">
+                                              <h6 className="node-title">{emp.firstName} {emp.lastName}</h6>
+                                              <p className="node-subtitle">{emp.position}</p>
+                                              {emp.targetRole && (
+                                                <div className="career-path">
+                                                  <Target className="h-3 w-3" style={{ color: 'var(--accent-gold)' }} />
+                                                  <span className="career-text">{emp.targetRole}</span>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Employees in Department (not in teams) */}
+                          {expandedNodes.has(`dept-${deptIndex}`) && (
+                            <div className="department-employees">
+                              {employees
+                                .filter(emp => emp.department === dept.name && !dept.teams?.some(team => team.name === emp.department))
+                                .map((emp) => (
+                                <div key={emp.id} className="employee-branch">
+                                  <div className="branch-line"></div>
+                                  <div className="employee-node">
+                                    <div className="employee-icon">
+                                      {getTrainerIcon(emp.trainerType)}
+                                    </div>
+                                    <div className="node-content">
+                                      <h6 className="node-title">{emp.firstName} {emp.lastName}</h6>
+                                      <p className="node-subtitle">{emp.position}</p>
+                                      {emp.targetRole && (
+                                        <div className="career-path">
+                                          <Target className="h-3 w-3" style={{ color: 'var(--accent-gold)' }} />
+                                          <span className="career-text">{emp.targetRole}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <Users className="h-12 w-12" style={{ color: 'var(--text-muted)' }} />
+                      <h3 className="empty-title">No Departments Set Up</h3>
+                      <p className="empty-subtitle">
+                        Complete the company setup to see your organization hierarchy here.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}

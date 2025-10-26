@@ -2306,6 +2306,251 @@ body {
     box-shadow: var(--shadow-hover);
 }
 
+/* Company Hierarchy Tree Styles */
+.hierarchy-tree {
+    padding: var(--spacing-lg);
+    background: var(--bg-primary);
+    border-radius: 12px;
+    border: 1px solid var(--bg-secondary);
+}
+
+.company-root {
+    position: relative;
+}
+
+.company-node {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--gradient-primary);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: var(--spacing-lg);
+    color: white;
+}
+
+.company-node .node-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-xs) 0;
+}
+
+.company-node .node-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+.departments-container {
+    margin-left: var(--spacing-lg);
+    position: relative;
+}
+
+.department-branch {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+}
+
+.branch-line {
+    position: absolute;
+    left: -var(--spacing-lg);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--bg-secondary);
+}
+
+.department-branch:before {
+    content: '';
+    position: absolute;
+    left: -var(--spacing-lg);
+    top: 30px;
+    width: var(--spacing-lg);
+    height: 2px;
+    background: var(--bg-secondary);
+}
+
+.department-node {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-card);
+    border: 2px solid var(--accent-green);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.department-node:hover {
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-1px);
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
+
+.expand-btn:hover {
+    background: var(--bg-secondary);
+}
+
+.teams-container {
+    margin-left: var(--spacing-xl);
+    margin-top: var(--spacing-md);
+    position: relative;
+}
+
+.team-branch {
+    position: relative;
+    margin-bottom: var(--spacing-md);
+}
+
+.team-branch .branch-line {
+    left: -var(--spacing-xl);
+}
+
+.team-branch:before {
+    content: '';
+    position: absolute;
+    left: -var(--spacing-xl);
+    top: 25px;
+    width: var(--spacing-xl);
+    height: 2px;
+    background: var(--bg-secondary);
+}
+
+.team-node {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--primary-purple);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.team-node:hover {
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-1px);
+}
+
+.employees-container,
+.department-employees {
+    margin-left: var(--spacing-xl);
+    margin-top: var(--spacing-sm);
+    position: relative;
+}
+
+.employee-branch {
+    position: relative;
+    margin-bottom: var(--spacing-sm);
+}
+
+.employee-branch .branch-line {
+    left: -var(--spacing-xl);
+}
+
+.employee-branch:before {
+    content: '';
+    position: absolute;
+    left: -var(--spacing-xl);
+    top: 20px;
+    width: var(--spacing-xl);
+    height: 2px;
+    background: var(--bg-secondary);
+}
+
+.employee-node {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.employee-node:hover {
+    border-color: var(--primary-blue);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-1px);
+}
+
+.employee-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.node-content {
+    flex: 1;
+}
+
+.node-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+}
+
+.node-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.career-path {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+}
+
+.career-text {
+    font-size: 0.75rem;
+    color: var(--accent-gold);
+    font-weight: 500;
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-muted);
+}
+
+.empty-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-md) 0 var(--spacing-sm) 0;
+}
+
+.empty-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
 /* Company Setup Responsive Design */
 @media (max-width: 768px) {
     .company-setup-page {
@@ -2363,6 +2608,29 @@ body {
         width: 100%;
         min-width: auto;
     }
+    
+    /* Hierarchy Responsive */
+    .hierarchy-tree {
+        padding: var(--spacing-md);
+    }
+    
+    .departments-container,
+    .teams-container,
+    .employees-container,
+    .department-employees {
+        margin-left: var(--spacing-md);
+    }
+    
+    .branch-line {
+        left: -var(--spacing-md);
+    }
+    
+    .department-branch:before,
+    .team-branch:before,
+    .employee-branch:before {
+        left: -var(--spacing-md);
+        width: var(--spacing-md);
+    }
 }
 
 @media (max-width: 480px) {
@@ -2384,5 +2652,32 @@ body {
     .setting-card {
         flex-direction: column;
         text-align: center;
+    }
+    
+    /* Hierarchy Mobile */
+    .company-node {
+        padding: var(--spacing-md);
+    }
+    
+    .company-node .node-title {
+        font-size: 1.25rem;
+    }
+    
+    .departments-container,
+    .teams-container,
+    .employees-container,
+    .department-employees {
+        margin-left: var(--spacing-sm);
+    }
+    
+    .branch-line {
+        left: -var(--spacing-sm);
+    }
+    
+    .department-branch:before,
+    .team-branch:before,
+    .employee-branch:before {
+        left: -var(--spacing-sm);
+        width: var(--spacing-sm);
     }
 }
