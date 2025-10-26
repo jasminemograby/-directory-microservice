@@ -34,31 +34,31 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-args: '--prod'
 
-  # Backend deployment to Railway
-  deploy-backend:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Deploy to Railway using Railway CLI
-      run: |
-        npm install -g @railway/cli
-        echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
-        cd backend
-        railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
+  # Backend deployment to Railway (DISABLED - using mock data)
+  # deploy-backend:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+  #   
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+  #     
+  #   - name: Setup Node.js
+  #     uses: actions/setup-node@v4
+  #     with:
+  #       node-version: '18'
+  #       
+  #   - name: Deploy to Railway using Railway CLI
+  #     run: |
+  #       npm install -g @railway/cli
+  #       echo "${{ secrets.RAILWAY_TOKEN }}" | railway login --token
+  #       cd backend
+  #       railway up --service ${{ secrets.RAILWAY_PROJECT_ID }}
 
   # Health check after deployment
   health-check:
     runs-on: ubuntu-latest
-    needs: [deploy-frontend, deploy-backend]
+    needs: [deploy-frontend]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     
     steps:
