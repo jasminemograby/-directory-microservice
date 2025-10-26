@@ -58,6 +58,9 @@ const useCompanyStore = create((set, get) => ({
   createCompany: async (companyData) => {
     set({ isLoading: true, error: null })
     try {
+      console.log('Creating company with data:', companyData)
+      console.log('API URL:', `${API_BASE_URL}/companies`)
+      
       const response = await fetch(`${API_BASE_URL}/companies`, {
         method: 'POST',
         headers: {
@@ -66,7 +69,11 @@ const useCompanyStore = create((set, get) => ({
         body: JSON.stringify(companyData),
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response headers:', response.headers)
+      
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (data.success) {
         set((state) => ({
@@ -83,7 +90,7 @@ const useCompanyStore = create((set, get) => ({
     } catch (error) {
       console.error('Create company error:', error)
       set({ error: error.message, isLoading: false })
-      toast.error('Failed to create company')
+      toast.error(`Failed to create company: ${error.message}`)
       return { success: false, error: error.message }
     }
   },
