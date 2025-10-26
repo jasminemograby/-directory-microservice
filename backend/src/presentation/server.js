@@ -60,6 +60,26 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Root API endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Directory Microservice API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: '/api/auth',
+      companies: '/api/companies',
+      employees: '/api/employees',
+      training: '/api/training',
+      instructors: '/api/instructors',
+      hr: '/api/hr',
+      test: '/api/test',
+      health: '/health'
+    }
+  });
+});
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/companies', companyRoutes);
