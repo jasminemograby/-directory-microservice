@@ -10,6 +10,7 @@ import CompanySetupPage from './pages/CompanySetupPage'
 import CompanyDashboardPage from './pages/CompanyDashboardPage'
 import DirectoryDashboardPage from './pages/DirectoryDashboardPage'
 import EmployeeListPage from './pages/EmployeeListPage'
+import EmployeeProfilePage from './pages/EmployeeProfilePage'
 import EmployeePage from './pages/EmployeePage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
@@ -37,6 +38,7 @@ function App() {
         <Route path="/company-setup" element={<CompanySetupPage />} />
         <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         <Route path="/employees" element={<EmployeeListPage />} />
+        <Route path="/employee/:id" element={<EmployeeProfilePage />} />
         
         {/* Protected routes */}
         <Route path="/" element={
