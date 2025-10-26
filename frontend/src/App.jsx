@@ -3,6 +3,7 @@ import { useAuthStore } from './stores/authStore'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterCompanyPage from './pages/RegisterCompanyPage'
+import CompanyDashboardPage from './pages/CompanyDashboardPage'
 import EmployeePage from './pages/EmployeePage'
 import HRDashboardPage from './pages/HRDashboardPage'
 import TrainingRequestsPage from './pages/TrainingRequestsPage'
@@ -22,6 +23,7 @@ function App() {
         } />
         
         <Route path="/register-company" element={<RegisterCompanyPage />} />
+        <Route path="/company-dashboard" element={<CompanyDashboardPage />} />
         
         {/* Protected routes */}
         <Route path="/" element={

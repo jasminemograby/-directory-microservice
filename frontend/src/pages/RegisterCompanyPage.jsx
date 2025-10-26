@@ -114,10 +114,10 @@ const RegisterCompanyPage = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                  onClick={() => window.location.href = '/login'}
+                  onClick={() => window.location.href = '/company-dashboard'}
                   className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                  Go to Dashboard
+                  Go to Company Dashboard
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
                 
