@@ -1,6 +1,7 @@
 /**
  * Main Express server setup
  * @fileoverview Server configuration and middleware setup
+ * Updated: Railway deployment fix
  */
 
 import express from 'express';
